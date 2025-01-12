@@ -94,7 +94,13 @@ function createWorkListDiv(document, parsedFiles) {
   const createdDiv = createWorkListDiv(document, parsedFiles);
   console.log(` - [3/4] 작업 목록 생성: 완료됨`);
 
-  document.getElementById('work-list').replaceWith(createdDiv);
+  const prevDiv = document.getElementById('work-list')
+
+  if (prevDiv) {
+    prevDiv.replaceWith(createdDiv);
+  } else {
+    document.body.appendChild(createdDiv);
+  }
 
   await fsp.writeFile(destPath, document.body.innerHTML);
   console.log(` - [4/4] HTML 파일에 쓰기: 완료됨`);
