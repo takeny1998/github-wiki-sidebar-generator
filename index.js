@@ -16,7 +16,7 @@ function parseFile(filePath) {
     return null;
   }
 
-  const date = parseInt(tokens[0], 10); // 첫 번째 토큰을 정수로 변환합니다.
+  const date = parseInt(tokens[0]);
 
   // yymmdd 형식이 아닌 경우 null을 반환합니다.
   if (isNaN(date)) {
@@ -32,8 +32,9 @@ function parseFile(filePath) {
  * 주어진 문서에서 작업 목록을 대체합니다.
  * @param {Document} document - jsdom의 Document 객체
  * @param {Array} parsedFiles - 파싱된 파일 정보 배열
+ * @returns {HTMLElement} - 대체된 Div 객체
  */
-function replaceWorkList(document, parsedFiles) {
+function createWorkListDiv(document, parsedFiles) {
   let div = document.getElementById('work-list') || document.createElement('div'); 
   div.id = 'work-list'; 
 
@@ -58,6 +59,8 @@ function replaceWorkList(document, parsedFiles) {
     li.appendChild(a);
     ul.appendChild(li); 
   }
+
+  return div;
 }
 
 (async function () {
@@ -80,16 +83,18 @@ function replaceWorkList(document, parsedFiles) {
 
   const parsedFiles = sourceFiles
     .map(parseFile) // 파일 파싱
-    .filter(Boolean) // null이 아닌 값만 필터링
+    .filter((e) => e) 
     .sort((a, b) => a.date - b.date); // 날짜 기준으로 정렬
-  console.log(` - [2/4] 작업 분석: ${sourceFiles.length}개 중 ${parseFile.length}개 처리`);
+  console.log(` - [2/4] 작업 분석: ${sourceFiles.length}개 중 ${parsedFiles.length}개 처리`);
 
   const destFile = await fsp.readFile(destPath); 
   const dom = new jsdom.JSDOM(destFile.toString()); 
   const document = dom.window.document;
 
-  replaceWorkList(document, parsedFiles);
+  const createdDiv = createWorkListDiv(document, parsedFiles);
   console.log(` - [3/4] 작업 목록 생성: 완료됨`);
+
+  document.getElementById('work-list').replaceWith(createdDiv);
 
   await fsp.writeFile(destPath, document.body.innerHTML);
   console.log(` - [4/4] HTML 파일에 쓰기: 완료됨`);
