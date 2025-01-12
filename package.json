@@ -1,0 +1,17 @@
+{
+  "name": "github_wiki_sidebar_generator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Heebeom Yang",
+  "license": "MIT",
+  "description": "A nodeJS module that finds markdown (.md) file and creates a sidebar (_Sidebar.md) for your Github wiki.",
+  "repository": "https://github.com/takeny1998/github-wiki-sidebar-generator",
+  "dependencies": {
+    "jsdom": "^26.0.0"
+  }
+}
