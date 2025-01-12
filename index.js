@@ -84,7 +84,7 @@ function createWorkListDiv(document, parsedFiles) {
   const parsedFiles = sourceFiles
     .map(parseFile) // 파일 파싱
     .filter((e) => e) 
-    .sort((a, b) => a.date - b.date); // 날짜 기준으로 정렬
+    .sort((a, b) => b.date - a.date); // desending by date
   console.log(` - [2/4] 작업 분석: ${sourceFiles.length}개 중 ${parsedFiles.length}개 처리`);
 
   const destFile = await fsp.readFile(destPath); 
